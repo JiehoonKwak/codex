@@ -52,6 +52,15 @@ saved configuration:
 codex -c tui.fullscreen_transcript=true
 ```
 
+Correction after user feedback: the user had already tried fullscreen transcript
+and disabled it because it appeared no less verbose. The saved `false` value
+therefore does **not** establish the cause of the reported experience. Native
+rendering has not been reproduced in that user's running session. Owned mode
+requires both fullscreen transcript and alternate screen; `--no-alt-screen`
+takes precedence even over `tui.alternate_screen = "always"`. Detailed transcript
+and raw presentation bypass compact disclosure. Distinguish full bodies still
+appearing from many individually compact calls still requiring excessive scroll.
+
 F4 focuses activity; arrows navigate, Enter toggles and left/right collapse or
 expand. The compact preview budget is fixed (`DETAIL_PREVIEW_LINES = 3`), not a
 user-facing Low/Medium/Full preference. This prototype explores that remaining

@@ -25,6 +25,7 @@
  <details class="notes"><summary>현재 가능한 방법과 다른 harness 비교</summary><div class="notes-content">
   <p><strong>현재 설치 버전은 0.163.0입니다.</strong> 로컬 설정은 <code>tui.fullscreen_transcript = false</code>였습니다. 이 버전의 새 전체 화면 transcript에는 짧은 툴 미리보기와 개별 펼치기가 이미 있습니다. 아래 명령은 저장된 설정을 바꾸지 않고 한 번 시험하는 방법입니다.</p>
   <pre>codex -c tui.fullscreen_transcript=true</pre>
+  <p>사용자는 이미 이 설정을 켜도 차이를 느끼지 못했다고 말씀하셨습니다. 따라서 저장값이 false라는 사실만으로 원인을 확정할 수 없습니다. 전체 화면의 짧은 미리보기는 alternate screen도 켜져 있어야 하며, <code>--no-alt-screen</code>은 이를 막습니다. 상세 transcript와 <code>/raw</code>에서는 접힌 표시를 사용하지 않습니다.</p>
   <p><code>F4</code>로 툴 활동에 포커스를 옮기고, ↑↓로 이동한 뒤 Enter 또는 ←→로 접고 펼칠 수 있습니다. 이것은 고정 길이 미리보기이며, 이 프로토타입의 Low / Medium / Full 설정은 아직 제안입니다. <a href="https://github.com/openai/codex/pull/46709" target="_blank" rel="noreferrer">기존 compact 렌더링 구현</a></p>
   <table><thead><tr><th>Harness</th><th>확인한 표시 제어</th><th>설계에 참고할 점</th></tr></thead><tbody>
    <tr><td><a href="https://pi.dev/docs/latest/usage" target="_blank" rel="noreferrer">Pi</a></td><td>Ctrl+O로 툴 출력 접기·펼치기</td><td>공통 단축키 하나로 모든 툴에 접근</td></tr>
