@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Codex 도구 출력 표시 실험</title>
+<style>
+:root{color-scheme:light;--paper:#f7f8fa;--ink:#182330;--muted:#596675;--line:#d7dce3;--blue:#245ec7;--terminal:#182330;--text:#e4e9ef;--dim:#a6b3c2;--ok:#8fd3b1;--error:#ffaaa7;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;font-size:16px}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink)}button,select,input{font:inherit}button,select{cursor:pointer}button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid #6099f0;outline-offset:3px}button{border:1px solid var(--line);background:white;color:var(--ink);padding:9px 14px;border-radius:6px}button:hover{background:#edf1f7}main{max-width:1560px;margin:auto;padding:32px}header{display:flex;justify-content:space-between;align-items:start;gap:24px}h1{font-size:29px;letter-spacing:-1px;margin:0 0 12px;font-weight:700}p{line-height:1.65;margin:0}header p{color:var(--muted);max-width:780px}a{color:var(--blue)}.controls{margin:28px 0 18px;display:flex;flex-wrap:wrap;align-items:center;gap:18px 28px}.control{display:flex;gap:12px;align-items:center}.segmented{display:flex;border:1px solid #a8b2c0;border-radius:7px;overflow:hidden}.segmented button{border:0;border-radius:0;min-width:86px;background:transparent}.segmented button[aria-pressed=true]{background:var(--ink);color:white}.control select{background:white;border:1px solid #a8b2c0;border-radius:6px;padding:8px 10px;max-width:100%}.check{display:flex;gap:9px;align-items:center}.check input{width:18px;height:18px;accent-color:var(--blue)}.caption{min-height:27px;color:var(--muted);margin-bottom:18px}.comparison{display:grid;grid-template-columns:1fr 1fr;gap:22px}.pane-title{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:12px}.pane-title h2{font-size:18px;margin:0}.measure{font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}.terminal{background:var(--terminal);color:var(--text);border-radius:8px;overflow:hidden}.terminal-bar{height:43px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid #3b4755;color:var(--dim);font-size:14px}.scroll{height:600px;overflow:auto;scrollbar-color:#78879b var(--terminal);padding:20px 18px;overscroll-behavior:contain;overflow-anchor:none}.terminal:focus-within{outline:2px solid #6099f0;outline-offset:2px}.message{white-space:pre-wrap;line-height:1.8;margin:0 0 22px;max-width:78ch}.user{background:#263545;padding:12px 14px;border-radius:4px}.assistant::before{content:'• ';color:#c2d5f1}.activity{margin:0 0 12px}.activity-head{display:flex;gap:9px;align-items:start;min-width:0;line-height:1.6}.status{color:var(--ok);flex:none}.status.failed{color:var(--error)}.status.running{color:#bad2ff}.call-title{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;flex:1}.call-title b{font-weight:600;color:white}.meta{font-size:13px;color:var(--dim);white-space:nowrap}.disclose{color:#c1d6fa;background:transparent;border:0;padding:0 2px;font-size:14px;white-space:nowrap;flex:none;min-height:24px}.disclose:hover{color:white;background:#30465f}.body{margin:6px 0 0 24px;position:relative;overflow:hidden}.body pre{font:14px/1.65 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;margin:0;color:var(--dim);tab-size:2}.body.preview{max-height:calc(3 * 23.1px)}.body.preview::after{content:'';position:absolute;bottom:0;right:0;width:24px;height:23px;background:linear-gradient(90deg,transparent,var(--terminal))}.more{margin:4px 0 0 24px;color:#b8ccec;font-size:13px}.group{margin-bottom:20px}.group-header{display:flex;align-items:center;gap:9px;margin-bottom:12px}.group-header button{color:#d2def0;font-size:14px}.group-count{color:var(--dim);font-size:14px}.group-children{margin-left:12px}.terminal-footer{border-top:1px solid #3b4755;padding:12px 18px;color:var(--dim);font-size:14px}.below{display:flex;justify-content:space-between;gap:24px;margin-top:20px;align-items:start}.below p{color:var(--muted);font-size:14px;max-width:780px}.below button{white-space:nowrap}details.notes{margin-top:30px;border-top:1px solid var(--line);padding-top:18px}summary{cursor:pointer;font-weight:600}.notes-content{max-width:1000px;padding-top:18px;line-height:1.8}.notes-content p{margin-bottom:14px}.notes-content pre{background:#e9edf2;padding:16px;overflow:auto;font-size:14px}.notes-content table{border-collapse:collapse;width:100%;font-size:14px;margin:20px 0}.notes-content th,.notes-content td{text-align:left;border-bottom:1px solid var(--line);padding:12px 12px 12px 0;vertical-align:top}.notes-content th{font-weight:600}dialog{border:1px solid var(--line);border-radius:9px;width:min(1000px,94vw);max-height:90vh;padding:0;background:var(--terminal);color:var(--text)}dialog::backdrop{background:#101a2d99}.dialog-header{position:sticky;top:0;background:var(--terminal);padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #3b4755;z-index:1}.dialog-header h2{font-size:18px;margin:0}.dialog-header button{color:var(--text);background:transparent}.trace-content{padding:24px}#config{color:var(--ink);background:white;width:min(680px,94vw)}#config .dialog-header{background:white}#config .dialog-header button{color:var(--ink)}#config pre{padding:8px 24px 20px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;line-height:1.8}#config p{padding:20px 24px 0;color:var(--muted)}.visually-hidden{position:absolute;width:1px;height:1px;clip:rect(0,0,0,0);overflow:hidden}
+.preview .input-preview{max-height:23.1px;overflow:hidden}.preview .output-preview{max-height:46.2px;overflow:hidden}.preview .input-preview{color:#c1d6fa}
+@media(min-width:1600px){.scroll{height:680px}}@media(max-width:1000px){main{padding:24px}.comparison{gap:14px}.call-title{font-size:13px}.scroll{padding:18px 12px}}@media(max-width:720px){main{padding:20px 16px}header{display:block}header button{margin-top:16px}h1{font-size:25px}.comparison{grid-template-columns:1fr}.comparison>section:first-child{display:none}.scroll{height:62vh;min-height:390px}.controls{gap:18px}.control{flex-wrap:wrap}.below{display:block}.below button{margin-top:14px}.caption{font-size:14px}.pane-title{flex-wrap:wrap}.segmented button{min-width:78px}.notes-content table{font-size:13px}.activity-head{flex-wrap:wrap}.call-title{flex-basis:55%}.meta{font-size:12px}}
+</style>
+<main>
+ <header><div><h1>호출은 남기고, 출력은 필요한 만큼.</h1><p>같은 세션을 Low, Medium, Full로 비교해 보세요. 긴 인자·결과·diff에 같은 규칙을 적용합니다.</p></div><button id="reset">초기화</button></header>
+ <div class="controls">
+  <div class="control"><span id="density-label">표시 수준</span><div class="segmented" role="group" aria-labelledby="density-label"><button data-mode="low" aria-pressed="false">Low</button><button data-mode="medium" aria-pressed="true">Medium</button><button data-mode="full" aria-pressed="false">Full</button></div></div>
+  <label class="control">예시<select id="scenario"><option value="research">문서·데이터 검토</option><option value="development">코드 수정·테스트</option></select></label>
+  <label class="check"><input id="group" type="checkbox">연속 호출 묶기</label>
+ </div>
+ <p class="caption" id="description" aria-live="polite"></p>
+ <div class="comparison">
+  <section aria-label="Full 비교 기준"><div class="pane-title"><h2>Full 비교 기준</h2><span class="measure" id="full-measure"></span></div><div class="terminal"><div class="terminal-bar"><span>codex</span><span>전체 표시</span></div><div class="scroll" id="baseline" tabindex="0" aria-label="전체 출력을 보여주는 세션"></div><div class="terminal-footer">인자와 결과 전체</div></div></section>
+  <section aria-label="선택한 표시 수준"><div class="pane-title"><h2 id="selected-title">Medium</h2><span class="measure" id="candidate-measure" aria-live="polite"></span></div><div class="terminal"><div class="terminal-bar"><span>codex</span><button class="disclose" id="trace-open">전체 기록 보기</button></div><div class="scroll" id="candidate" tabindex="0" aria-label="표시 수준을 적용한 세션"></div><div class="terminal-footer" id="footer"></div></div></section>
+ </div>
+ <div class="below"><p>가상 세션입니다. 도구를 실행하지 않습니다. 표시 수준을 바꿔도 예시 원문은 유지됩니다. Full은 비교 기준이며 현재 Codex의 기본 화면을 재현한 것은 아닙니다.</p><button id="config-open">설정안 보기</button></div>
+ <details class="notes"><summary>현재 가능한 방법과 다른 harness 비교</summary><div class="notes-content">
+  <p><strong>현재 설치 버전은 0.163.0입니다.</strong> 로컬 설정은 <code>tui.fullscreen_transcript = false</code>였습니다. 이 버전의 새 전체 화면 transcript에는 짧은 툴 미리보기와 개별 펼치기가 이미 있습니다. 아래 명령은 저장된 설정을 바꾸지 않고 한 번 시험하는 방법입니다.</p>
+  <pre>codex -c tui.fullscreen_transcript=true</pre>
+  <p><code>F4</code>로 툴 활동에 포커스를 옮기고, ↑↓로 이동한 뒤 Enter 또는 ←→로 접고 펼칠 수 있습니다. 이것은 고정 길이 미리보기이며, 이 프로토타입의 Low / Medium / Full 설정은 아직 제안입니다. <a href="https://github.com/openai/codex/pull/46709" target="_blank" rel="noreferrer">기존 compact 렌더링 구현</a></p>
+  <table><thead><tr><th>Harness</th><th>확인한 표시 제어</th><th>설계에 참고할 점</th></tr></thead><tbody>
+   <tr><td><a href="https://pi.dev/docs/latest/usage" target="_blank" rel="noreferrer">Pi</a></td><td>Ctrl+O로 툴 출력 접기·펼치기</td><td>공통 단축키 하나로 모든 툴에 접근</td></tr>
+   <tr><td><a href="https://opencode.ai/docs/tui/" target="_blank" rel="noreferrer">OpenCode</a></td><td>/details로 툴 실행 세부사항 전환</td><td>표시 제어를 명시적인 명령으로 노출</td></tr>
+   <tr><td><a href="https://geminicli.com/docs/cli/settings/" target="_blank" rel="noreferrer">Gemini CLI</a></td><td>ui.compactToolOutput, 기본 true</td><td>/settings에서 표시 설정 제공. <a href="https://geminicli.com/docs/reference/keyboard-shortcuts/" target="_blank" rel="noreferrer">일반 버퍼에서는 Ctrl+O로 내용 확장</a></td></tr>
+   <tr><td><a href="https://code.claude.com/docs/en/interactive-mode" target="_blank" rel="noreferrer">Claude Code</a></td><td>축약된 기본 표시와 Ctrl+O transcript</td><td>작업 화면과 상세 기록을 분리</td></tr>
+  </tbody></table>
+  <p>관련 요청: <a href="https://github.com/openai/codex/issues/26279" target="_blank" rel="noreferrer">#26279 MCP 본문 접기</a>, <a href="https://github.com/openai/codex/issues/4550" target="_blank" rel="noreferrer">#4550 접는 기준 설정</a>, <a href="https://github.com/openai/codex/issues/21252" target="_blank" rel="noreferrer">#21252 툴 활동 숨기기</a>. 확인일: 2026-10-21.</p>
+  <p>현재 <a href="https://github.com/openai/codex/blob/main/docs/contributing.md" target="_blank" rel="noreferrer">contribution 가이드</a>는 외부 코드 PR을 받지 않습니다. 기존 이슈에 구체적인 화면·설계·재현 근거를 제시하는 경로가 안내되어 있습니다.</p>
+ </div></details>
+</main>
+<dialog id="trace"><div class="dialog-header"><h2>전체 기록</h2><button data-close="trace" aria-label="전체 기록 닫기">닫기</button></div><div class="trace-content" id="trace-content"></div></dialog>
+<dialog id="config"><div class="dialog-header"><h2>설정안</h2><button data-close="config" aria-label="설정안 닫기">닫기</button></div><p>아래 키는 설계 제안입니다. 현재 Codex 설정에 붙여 넣을 수 없습니다.</p><pre id="config-text"></pre></dialog>
+<script>
+'use strict';
+// One presentation policy covers every activity. Source records never change.
+const $ = id => document.getElementById(id);
+const escapeHTML = text => String(text).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const documentSections = [
+ ['Question', 'Separate the observation from its proposed explanation.', 'State what additional evidence could change the interpretation.'],
+ ['Inputs', 'Reuse the reviewed input manifest and saved processing outputs.', 'Record the unit of observation before combining any tables.'],
+ ['Independent review', 'Provide common experimental context to every reviewer.', 'Keep peer conclusions private until first-pass reports are complete.'],
+ ['Execution', 'Write new outputs into the assigned run directory.', 'Record command, environment, parameters and exit status.'],
+ ['Evidence', 'Retain supporting, opposing and unresolved observations.', 'Do not count overlapping measurements as independent confirmation.'],
+ ['Follow-up', 'Choose the next analysis by the uncertainty it resolves.', 'Keep alternative explanations available for later comparison.'],
+ ['Verification', 'Read the actual tables and inspect the exported figures.', 'A successful process exit does not establish the scientific conclusion.'],
+ ['Handoff', 'Link each conclusion to its saved evidence and producer.', 'Explain remaining decisions without reconstructing the whole session.']
+];
+const doc = ['# Independent analysis plan', '', ...documentSections.flatMap(([title,...text]) => ['## '+title,'',...text,''])].join('\n');
+const diff = ['*** Update File: docs/analysis-plan.md','@@','-# Analysis plan','+# Independent analysis plan',...doc.split('\n').slice(1).map(line => '+'+line)].join('\n');
+const script = ['python - <<\'PY\'','from pathlib import Path','import csv','', 'root = Path("runs/review")','paths = sorted(root.glob("*.tsv"))','summary = []','for path in paths:','    with path.open() as handle:','        reader = csv.DictReader(handle, delimiter="\\t")','        rows = list(reader)','    summary.append((path.name, len(rows)))','for name, count in summary:','    print(f"{name}: {count} rows")',"PY"].join('\n');
+const call = (id,tool,title,input,output,status='success',meta='') => Object.freeze({kind:'tool',id,tool,title,input,output,status,meta});
+const message = (role,text) => Object.freeze({kind:role,text});
+const scenarios = Object.freeze({
+ research:Object.freeze([
+  message('user','기존 분석을 확인하고 독립 검토 계획을 정리해주세요.'),
+  message('assistant','입력 자료와 기존 결과를 확인한 뒤, 검토 계획을 정리하겠습니다.'),
+  call('r1','exec_command','계획 문서 읽기','cat docs/analysis-plan.md',doc,'success','exit 0'),
+  call('r2','mcp.read_file','입력 자료 목록 확인',JSON.stringify({path:'runs/review/manifest.json',includeMetadata:true},null,2),JSON.stringify({files:[{name:'programs.tsv',rows:1840},{name:'sample-metadata.tsv',rows:57},{name:'motif-summary.tsv',rows:12600}],scope:'Illustrative data only',review:{inputs:'frozen',independentReports:'pending',figures:'not started'}},null,2),'success','3 files'),
+  call('r3','exec_command','저장된 표 확인',script,'programs.tsv: 1840 rows\nsample-metadata.tsv: 57 rows\nmotif-summary.tsv: 12600 rows\n\nInput inventory complete.','success','exit 0'),
+  message('assistant','표 목록을 확인했습니다. 독립 검토 원칙과 확인 기준을 문서에 반영하겠습니다.'),
+  call('r4','apply_patch','검토 계획 수정',diff,'Success. Updated the following files:\nM docs/analysis-plan.md','success','+44 −1'),
+  call('r5','exec_command','문서 링크 확인','python scripts/check_links.py docs/analysis-plan.md','Traceback (most recent call last):\n  File "scripts/check_links.py", line 18, in <module>\n    check(path)\nFileNotFoundError: docs/input-manifest.md\n\n1 broken link found.','failed','exit 1'),
+  call('r6','apply_patch','입력 자료 링크 수정','*** Update File: docs/analysis-plan.md\n@@\n-[Inputs](input-manifest.md)\n+[Inputs](../runs/review/manifest.json)','Success. Updated the following files:\nM docs/analysis-plan.md','success','+1 −1'),
+  message('assistant','검토 계획을 정리하고 잘못된 링크를 수정했습니다. 독립 보고서는 아직 작성하지 않았습니다.')
+ ]),
+ development:Object.freeze([
+  message('user','manifest가 없는 경우의 오류를 고치고 테스트해주세요.'),
+  message('assistant','입력을 읽는 경로와 테스트를 확인하겠습니다.'),
+  call('d1','exec_command','관련 코드 검색','rg -n "load_manifest|manifest_path" src tests',Array.from({length:12},(_,i)=>`src/manifest.py:${14+i*3}: ${['def load_manifest(path):','    manifest_path = Path(path)','    return read_manifest(manifest_path)'][i%3]}`).join('\n'),'success','exit 0'),
+  call('d2','mcp.read_file','테스트 파일 읽기',JSON.stringify({path:'tests/test_manifest.py',offset:0,limit:100},null,2),['from app.manifest import load_manifest','import pytest','','def test_load_existing_manifest(tmp_path):','    path = tmp_path / "manifest.json"','    path.write_text(\'{"files": []}\')','    assert load_manifest(path) == {"files": []}','','def test_missing_manifest(tmp_path):','    with pytest.raises(FileNotFoundError):','        load_manifest(tmp_path / "missing.json")'].join('\n'),'success','11 lines'),
+  call('d3','exec_command','회귀 테스트 실행','uv run pytest tests/test_manifest.py -q','F.\n================== FAILURES ==================\n________________ test_missing_manifest ________________\nE   Failed: DID NOT RAISE <class \'FileNotFoundError\'>\n\n1 failed, 1 passed in 0.28s','failed','exit 1'),
+  message('assistant','없는 파일을 빈 manifest로 바꾸던 처리를 제거하겠습니다.'),
+  call('d4','apply_patch','누락된 파일 오류 복구','*** Update File: src/manifest.py\n@@\n-    if not path.exists():\n-        return {"files": []}\n     return json.loads(path.read_text())','Success. Updated the following files:\nM src/manifest.py','success','−2'),
+  call('d5','exec_command','회귀 테스트 재실행','uv run pytest tests/test_manifest.py -q','..\n2 passed in 0.25s','success','exit 0'),
+  message('assistant','없는 파일을 정상 입력처럼 처리하던 원인을 제거했습니다. 회귀 테스트 2개가 통과했습니다.')
+ ])
+});
+let mode='medium', scenario='research', grouped=false;
+const overrides=new Map(), groupOverrides=new Set();
+const descriptors={low:'모든 호출을 한 줄로 표시합니다. 성공·실패 모두 본문은 접고, 상태와 호출 대상은 남깁니다.',medium:'모든 호출에서 인자 1줄과 결과 2줄을 미리 봅니다. 성공·실패에 같은 기준을 적용합니다.',full:'모든 호출의 인자와 결과를 펼칩니다. 개별 호출은 다시 접을 수 있습니다.'};
+function bodyText(record){return '입력\n'+record.input+'\n\n결과\n'+record.output;}
+function activityHTML(record,level,scope){
+ const key=scope+':'+record.id;
+ const open=scope==='candidate'&&overrides.has(key)?overrides.get(key):level==='full';
+ const showBody=open||level==='medium';
+ const body=open?`<pre>${escapeHTML(bodyText(record))}</pre>`:`<pre class="input-preview" aria-label="입력 미리보기">↳ ${escapeHTML(record.input)}</pre><pre class="output-preview" aria-label="결과 미리보기">${escapeHTML(record.output)}</pre>`;
+ const symbol=record.status==='failed'?'✗':'✓';
+ return `<article class="activity" data-call="${record.id}"><div class="activity-head"><span class="status ${record.status}" aria-label="${record.status==='failed'?'실패':'성공'}">${symbol}</span><span class="call-title" title="${escapeHTML(record.tool+' / '+record.title)}"><b>${escapeHTML(record.tool)}</b> ${escapeHTML(record.title)}</span><span class="meta">${escapeHTML(record.meta)}</span>${scope==='candidate'?`<button class="disclose" data-toggle="${key}" aria-expanded="${open}" aria-label="${escapeHTML(record.title)} ${open?'접기':'펼치기'}">${open?'접기':'펼치기'}</button>`:''}</div>${showBody?`<div class="body ${open?'':'preview'}">${body}</div>`:''}${!open&&level==='medium'?'<div class="more">나머지는 펼쳐서 보기</div>':''}</article>`;
+}
+function renderEntries(level,scope,group){
+ let groupId=0, html='',pending=[];
+ const flush=()=>{
+  if(!pending.length)return;
+  if(group){
+   const id='g'+groupId++, open=groupOverrides.has(id);
+   const failures=pending.filter(record=>record.status==='failed').length;
+   html+=`<div class="group"><div class="group-header"><span class="status ${failures?'failed':''}">${failures?'✗':'✓'}</span><button class="disclose" data-group="${id}" aria-expanded="${open}">${pending.length}개 호출 ${open?'접기':'펼치기'}</button><span class="group-count">성공 ${pending.length-failures}${failures?' / 실패 '+failures:''}</span></div>${open?`<div class="group-children">${pending.map(record=>activityHTML(record,level,scope)).join('')}</div>`:''}</div>`;
+  }else html+=pending.map(record=>activityHTML(record,level,scope)).join('');
+  pending=[];
+ };
+ for(const record of scenarios[scenario]){
+  if(record.kind==='tool')pending.push(record);
+  else{flush();html+=`<p class="message ${record.kind}">${escapeHTML(record.text)}</p>`;}
+ }flush();return html;
+}
+function measure(){
+ const a=$('baseline'),b=$('candidate');
+ const af=a.scrollHeight,bf=b.scrollHeight;
+ $('full-measure').textContent=`${(af/a.clientHeight).toFixed(1)} 화면`;
+ $('candidate-measure').textContent=`${(bf/b.clientHeight).toFixed(1)} 화면${af>0?' / 전체 대비 '+Math.round((1-bf/af)*100)+'% 짧음':''}`;
+ if(window.matchMedia('(max-width:720px)').matches)$('candidate-measure').textContent=`${(bf/b.clientHeight).toFixed(1)} 화면`;
+}
+function render(resetScroll=false){
+ const position=$('candidate').scrollTop;
+ $('baseline').innerHTML=renderEntries('full','baseline',false);
+ $('candidate').innerHTML=renderEntries(mode,'candidate',grouped);
+ $('selected-title').textContent=mode[0].toUpperCase()+mode.slice(1)+(grouped?' / 연속 호출 묶음':'');
+ $('description').textContent=descriptors[mode]+(grouped?' 대화 메시지 사이의 연속 호출만 묶습니다.':'');
+ $('footer').textContent=grouped?'묶음을 펼친 뒤 개별 호출도 펼칠 수 있습니다.':'각 호출의 펼치기 버튼으로 원문을 확인하세요.';
+ document.querySelectorAll('[data-mode]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.mode===mode)));
+ $('candidate').scrollTop=resetScroll?0:position;
+ if(resetScroll)$('baseline').scrollTop=0;
+ requestAnimationFrame(measure);
+}
+document.querySelectorAll('[data-mode]').forEach(button=>button.addEventListener('click',()=>{mode=button.dataset.mode;overrides.clear();render(true);}));
+$('scenario').addEventListener('change',event=>{scenario=event.target.value;overrides.clear();groupOverrides.clear();render(true);});
+$('group').addEventListener('change',event=>{grouped=event.target.checked;groupOverrides.clear();render(true);});
+$('candidate').addEventListener('click',event=>{
+ const button=event.target.closest('button');if(!button)return;
+ if(button.dataset.toggle){overrides.set(button.dataset.toggle,button.getAttribute('aria-expanded')!=='true');render();const restored=document.querySelector(`[data-toggle="${button.dataset.toggle}"]`);restored?.focus({preventScroll:true});}
+ if(button.dataset.group){const id=button.dataset.group;if(groupOverrides.has(id))groupOverrides.delete(id);else groupOverrides.add(id);render();document.querySelector(`[data-group="${id}"]`)?.focus({preventScroll:true});}
+});
+$('reset').addEventListener('click',()=>{mode='medium';scenario='research';grouped=false;overrides.clear();groupOverrides.clear();$('scenario').value=scenario;$('group').checked=false;render(true);});
+$('trace-open').addEventListener('click',()=>{$('trace-content').innerHTML=renderEntries('full','trace',false);$('trace').showModal();});
+$('config-open').addEventListener('click',()=>{$('config-text').textContent=`# Proposal only; these keys do not exist in Codex today.\n[tui]\ntool_output_detail = "${mode}" # low | medium | full\ngroup_tool_activity = ${grouped}\n\n# Low: one header per call, no body.\n# Medium: at most 3 wrapped body rows per call.\n# Full: all retained arguments and output.\n# The same policy applies to success and failure.\n# Per-call expansion overrides this display default.\n# Model context, approvals and storage are unchanged.`;$('config').showModal();});
+document.querySelectorAll('[data-close]').forEach(button=>button.addEventListener('click',()=>$(button.dataset.close).close()));
+window.addEventListener('resize',measure);
+render();
+</script>
+</html>
